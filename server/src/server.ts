@@ -21,9 +21,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/photos', photoRoutes);
 app.use('/api/comments', commentRoutes);
 
-// Error handling
-// app.use(errorHandler);
-
 // Serve static files from client/dist
 app.use(express.static(path.join(__dirname, '../../client/dist/be-nice-client/browser')))
 
@@ -32,6 +29,9 @@ app.get('*', (req, res) => {
   console.log('CATCH ALL')
   res.sendFile(path.join(__dirname, '../../client/dist/be-nice-client/browser/index.html'));
 })
+
+// Error handling
+app.use(errorHandler);
 
 // Start server
 app.listen(PORT, () => {
