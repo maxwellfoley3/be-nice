@@ -22,7 +22,7 @@ app.use('/api/photos', photoRoutes);
 app.use('/api/comments', commentRoutes);
 
 // Error handling
-app.use(errorHandler);
+// app.use(errorHandler);
 
 // Serve static files from client/dist
 app.use(express.static(path.join(__dirname, '../../client/dist/be-nice-client/browser')))
