@@ -20,31 +20,8 @@ router.get('/photo/:photoId', async (req, res, next) => {
         createdAt: 'desc'
       }
     });
-
-    // Get photos from comment authors
-    const authorIds = [...new Set(comments.map(comment => comment.author.id))];
-    const authorPhotos = await prisma.photo.findMany({
-      where: {
-        userId: {
-          in: authorIds
-        }
-      },
-      select: {
-        imageUrl: true,
-        userId: true
-      }
-    });
-
-    // Add photos to response
-    const commentsWithPhotos = comments.map(comment => ({
-      ...comment,
-      author: {
-        ...comment.author,
-        photos: authorPhotos.filter(photo => photo.userId === comment.author.id)
-      }
-    }));
     
-    res.json(commentsWithPhotos);
+    res.json(comments);
   } catch (error) {
     next(error);
   }
