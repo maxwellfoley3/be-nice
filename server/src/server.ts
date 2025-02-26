@@ -29,6 +29,7 @@ app.use(express.static(path.join(__dirname, '../../client/dist/be-nice-client/br
 
 /* final catch-all route to index.html defined last */
 app.get('/*', (req, res) => {
+  console.log('CATCH ALL')
   res.sendFile(path.join(__dirname, '../../client/dist/be-nice-client/browser/index.html'));
 })
 
