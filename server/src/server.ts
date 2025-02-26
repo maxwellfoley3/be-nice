@@ -27,6 +27,11 @@ app.use(errorHandler);
 // Serve static files from client/dist
 app.use(express.static(path.join(__dirname, '../../client/dist/be-nice-client/browser')))
 
+/* final catch-all route to index.html defined last */
+app.get('/*', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+})
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
