@@ -1,5 +1,5 @@
 node_modules
-client/.angular
+client/.angular/
 client/dist
 .env
 package-lock.json
