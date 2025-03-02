@@ -31,9 +31,6 @@ router.get('/user/:clientId', async (req, res, next) => {
     if (!user) {  
       throw new AppError('User not found', 404);
     }
-
-    console.log('user',user);
-    console.log('user.id',user.id);
     
     const photos = await prisma.photo.findMany({
       where: { userId: user.id }
