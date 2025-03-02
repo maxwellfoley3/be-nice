@@ -1,0 +1,16 @@
+<div class="photo-list-container">
+    <div class="camera-button">
+        <a [routerLink]="['/take-photo']">
+          <img src="assets/photo.svg" alt="Upload Photo">
+        </a>
+    </div>
+    <div class="photo-grid">
+      @for (photo of photos; track photo.id) {
+        <div class="photo-card">
+          <a [routerLink]="['/photos', photo.id]">
+            <img [src]="photo.imageUrl" [alt]="'Photo by user ' + photo.userId" />
+          </a>
+        </div>
+      }
+    </div>
+</div>

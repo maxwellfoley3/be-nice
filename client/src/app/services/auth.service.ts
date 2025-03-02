@@ -24,14 +24,12 @@ export class AuthService {
 
   private generateAndStoreUuid(): void {
     const uuid = crypto.randomUUID();
-    this.setToken(uuid);
-    // For now, we'll use the UUID as both token and userId
-    this.setUserId(parseInt(uuid.replace(/-/g, '').slice(0, 8), 16));
+    this.setUserId(uuid);
   }
 
-  async authenticate(id: string): Promise<void> {
+  async authenticate(): Promise<void> {
     try {
-      const response = await this.http.post<AuthResponse>(`${API_URL}/auth/register`, { id })
+      const response = await this.http.post<AuthResponse>(`${API_URL}/auth/register`, { id: this.getUserId() })
         .toPromise();
       
       if (response) {
@@ -49,17 +47,17 @@ export class AuthService {
     this.isAuthenticatedSubject.next(false);
   }
 
-  isAuthenticated(): Observable<boolean> {
-    return this.isAuthenticatedSubject.asObservable();
+  isAuthenticated(): boolean {
+    return this.isAuthenticatedSubject.getValue();
   }
 
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
   }
 
-  getUserId(): number | null {
+  getUserId(): string | null {
     const userId = localStorage.getItem(this.userIdKey);
-    return userId ? parseInt(userId) : null;
+    return userId;
   }
 
   private setToken(token: string): void {
@@ -67,8 +65,8 @@ export class AuthService {
     this.isAuthenticatedSubject.next(true);
   }
 
-  private setUserId(userId: number): void {
-    localStorage.setItem(this.userIdKey, userId.toString());
+  private setUserId(userId: string): void {
+    localStorage.setItem(this.userIdKey, userId);
   }
 
   private hasToken(): boolean {

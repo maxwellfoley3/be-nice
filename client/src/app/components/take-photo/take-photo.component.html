@@ -1,0 +1,21 @@
+<div class="auth-dialog">
+    <div class="content">
+      <h1>Welcome to Be Nice</h1>
+      <p>The social media app for kind & beautiful people.</p>
+      <h2>Take a Selfie to Continue</h2>
+      <div class="camera-container">
+        <canvas #canvasElement></canvas>
+        @if (!photoTaken) {
+          <video #videoElement autoplay playsinline></video>
+          <div class="controls">
+            <button (click)="takePhoto()">Take Photo</button>
+          </div>
+        } @else {
+          <div class="controls">
+              <button (click)="retakePhoto()">Retake</button>
+              <button (click)="acceptPhoto()">Accept</button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>

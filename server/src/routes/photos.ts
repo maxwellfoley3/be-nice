@@ -21,6 +21,30 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+// Get all photos for a user
+router.get('/user/:clientId', async (req, res, next) => {
+  try {
+    const user = await prisma.user.findFirst({
+      where: { clientId: req.params.clientId }
+    });
+
+    if (!user) {  
+      throw new AppError('User not found', 404);
+    }
+
+    console.log('user',user);
+    console.log('user.id',user.id);
+    
+    const photos = await prisma.photo.findMany({
+      where: { userId: user.id }
+    });
+    res.json(photos);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
 // Upload a new photo
 router.post('/', authenticate, async (req, res, next) => {
   console.log('uploading photo');
@@ -52,7 +76,7 @@ router.post('/', authenticate, async (req, res, next) => {
       }
     });
 
-    res.status(201)//.json(photo);
+    res.status(201).json(photo);
   } catch (error) {
     next(error);
   }

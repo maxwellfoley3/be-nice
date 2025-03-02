@@ -33,4 +33,8 @@ export class PhotoService {
     };
     return this.http.delete<void>(`${API_URL}/photos/${id}`, { headers });
   }
+
+  getPhotosByUser(userId: string): Observable<Photo[]> {
+    return this.http.get<Photo[]>(`${API_URL}/photos/user/${userId}`);
+  }
 } 

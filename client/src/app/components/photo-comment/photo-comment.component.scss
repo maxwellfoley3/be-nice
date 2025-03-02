@@ -1,0 +1,135 @@
+.back-button {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 5;
+    padding: 1rem;
+    border-radius: 50%;
+    img {
+        width: 50px;
+        height: 50px;
+        filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .4));
+    }
+}
+
+.back-button:hover {
+    background-color: #0003;
+}
+
+.photo-comment-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.photo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.comments-section {
+    background: rgba(255,255,255,0.5);
+    position: relative;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 2;
+    margin-top: 150px;
+}
+
+h3 {
+    margin-bottom: 1rem;
+}
+
+.comment-form {
+    margin-bottom: 2rem;
+}
+
+textarea {
+    width: 90%;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    font-family: 'Courier New', Courier, monospace;
+    padding: 0.5rem 1rem;
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #333;
+}
+
+.comment {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+}
+
+.comment-photo {
+    margin-right: 1rem;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.user {
+    font-weight: bold;
+}
+
+.date {
+    color: #666;
+}
+
+.content {
+    margin: 0;
+}
+
+.delete-btn {
+    margin-top: 0.5rem;
+    background-color: #dc3545;
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+.comment-photo img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    img {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+.comment-text .content {
+    font-size: 1.2rem;
+}

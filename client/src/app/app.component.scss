@@ -1,0 +1,19 @@
+.container {
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.header-image {
+    position: fixed;
+    z-index: 3;
+    right: 0px;
+    top: 0px;
+    img {
+        height: 200px;
+    }
+    pointer-events: none;
+}

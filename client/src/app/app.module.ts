@@ -2,25 +2,26 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { provideHttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { CameraCaptureComponent } from './components/camera-capture/camera-capture.component';
-//import { AuthDialogComponent } from './components/auth-dialog/auth-dialog.component';
 import { PhotoListComponent } from './components/photo-list/photo-list.component';
+import { PhotoGuardService } from './guards/photo-guard-service';
+import { routes } from './app.routes';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CameraCaptureComponent,
- //   AuthDialogComponent,
     PhotoListComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    RouterModule.forRoot(routes),
   ],
   providers: [
-    provideHttpClient()
+    provideHttpClient(),
+    PhotoGuardService
   ],
   bootstrap: [AppComponent]
 })

@@ -2,7 +2,7 @@ export interface Photo {
     id: number;
     imageUrl: string;
     userId: number;
-    user: {
+    user?: {
       id: number;
       email: string;
     };

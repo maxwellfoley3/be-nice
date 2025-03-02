@@ -4,9 +4,12 @@ export interface Comment {
     id: number;
     content: string;
     createdAt: string;
+    sentimentLabel: string;
+    sentimentScore: number;
     author: {
         id: number;
         email: string;
-        photos: Photo[];
     };
+    photo: Photo;
+    authorPhoto: string;
 }

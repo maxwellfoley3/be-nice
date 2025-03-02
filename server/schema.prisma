@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id           Int          @id @default(autoincrement())
-  clientId     String
+  clientId     String       @unique
   photos       Photo[]
   comments     Comment[]
 }
@@ -22,6 +22,9 @@ model Comment {
   authorId     Int
   photo        Photo        @relation(fields: [photoId], references: [id])
   photoId      Int
+  sentimentLabel String
+  sentimentScore Float
+  authorPhoto   String?
 }
 
 model Photo {

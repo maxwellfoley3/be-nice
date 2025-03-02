@@ -6,137 +6,25 @@ import { CommentService } from '../../services/comment.service';
 import { CommonModule } from '@angular/common';
 import { Comment } from '../../models/comment';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-photo-comment',
-  template: `
-    <div class="photo-comment-container" *ngIf="photo">
-      <img [src]="photo.imageUrl" alt="Photo" class="photo">
-      
-      <div class="comments-section">
-        <h3>Comments</h3>
-        
-        <div class="comment-form">
-          <textarea 
-            [(ngModel)]="newComment" 
-            placeholder="Add a comment..."
-            rows="3"
-          ></textarea>
-          <button (click)="addComment()">Post Comment</button>
-        </div>
-
-        <div class="comments-list">
-          <div class="comment" *ngFor="let comment of comments">
-            <div class="comment-header">
-              <span class="date">{{comment.createdAt | date}}</span>
-            </div>
-            <p class="content">{{comment.content}}</p>
-            <button 
-              *ngIf="currentUserId === comment.author.id"
-              (click)="deleteComment(comment.id)"
-              class="delete-btn"
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .photo-comment-container {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-
-    .photo {
-      width: 100%;
-      max-height: 500px;
-      object-fit: contain;
-      margin-bottom: 2rem;
-    }
-
-    .comments-section {
-      background: white;
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    h3 {
-      margin-bottom: 1rem;
-    }
-
-    .comment-form {
-      margin-bottom: 2rem;
-    }
-
-    textarea {
-      width: 100%;
-      padding: 0.5rem;
-      margin-bottom: 0.5rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-    }
-
-    button {
-      padding: 0.5rem 1rem;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    .comment {
-      padding: 1rem;
-      border-bottom: 1px solid #eee;
-    }
-
-    .comment-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-    }
-
-    .user {
-      font-weight: bold;
-    }
-
-    .date {
-      color: #666;
-    }
-
-    .content {
-      margin: 0;
-    }
-
-    .delete-btn {
-      margin-top: 0.5rem;
-      background-color: #dc3545;
-      font-size: 0.8rem;
-      padding: 0.25rem 0.5rem;
-    }
-
-    .delete-btn:hover {
-      background-color: #c82333;
-    }
-  `]
-  ,
+  templateUrl: './photo-comment.component.html',
+  styleUrls: ['./photo-comment.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, RouterModule]
 })
 export class PhotoCommentComponent implements OnInit {
   photo: any;
   comments: Comment[] = [];
   newComment: string = '';
-  currentUserId: number | null;
+  currentUserId: string | null;
+  negativeSentiment = false;
+  positiveSentiment = false;
+  showServiceUnavailable = false;
+  loading = false;
+  math = Math;
 
   constructor(
     private route: ActivatedRoute,
@@ -166,17 +54,38 @@ export class PhotoCommentComponent implements OnInit {
     });
   }
 
+  averageSentiment(comments: Comment[]) {
+    const totalSentiment = comments.reduce((sum, comment) => sum + comment.sentimentScore, 0);
+    return totalSentiment / comments.length;
+  }
+
   addComment() {
+    this.negativeSentiment = false;
+    this.positiveSentiment = false;
+    this.loading = true;
     if (!this.newComment.trim()) return;
 
     const photoId = this.route.snapshot.params['id'];
     // Note: You'll need to implement this method in your PhotoService
     this.commentService.addComment(photoId, this.newComment).subscribe({
       next: () => {
+        this.showServiceUnavailable = false;
+        this.loading = false;
+        this.positiveSentiment = true;
         this.loadComments(photoId);
         this.newComment = '';
       },
-      error: (error) => console.error('Failed to add comment:', error)
+      error: (error) => {
+        this.loading = false;
+        if (error.status === 503) {
+          this.showServiceUnavailable = true;
+        }
+        if (error.status === 400 && error.error.message === 'Comment is negative') {
+          this.negativeSentiment = true;
+        } else {
+          console.error('Failed to add comment:', error);
+        }
+      }
     });
   }
 

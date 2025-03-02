@@ -2,7 +2,8 @@ import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { authenticate } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
-
+import { analyzeSentiment } from '../services/sentiment';
+import { getCurrentPhotoForUser } from '../services/getCurrentPhotoForUser';
 const router = Router();
 const prisma = new PrismaClient();
 
@@ -14,14 +15,28 @@ router.get('/photo/:photoId', async (req, res, next) => {
         photoId: parseInt(req.params.photoId)
       },
       include: {
-        author: true
+        author: true,
+        photo: true
       },
       orderBy: {
         createdAt: 'desc'
       }
     });
-    
-    res.json(comments);
+
+    // get the current photo for each user
+    const currentPhotos = await Promise.all(comments.map(async (comment) => {
+      return await getCurrentPhotoForUser(comment.authorId);
+    }));
+
+    // add the current photo to the comments
+    const commentsWithPhotos = comments.map((comment, index) => {
+      return {
+        ...comment,
+        authorPhoto: currentPhotos[index]?.imageUrl
+      };
+    });
+
+    res.json(commentsWithPhotos);
   } catch (error) {
     next(error);
   }
@@ -29,30 +44,38 @@ router.get('/photo/:photoId', async (req, res, next) => {
 
 // Create a comment
 router.post('/', authenticate, async (req, res, next) => {
-  console.log('Creating comment');
   try {
     const { content, photoId } = req.body;
-    console.log('Content:', content);
     if (!content || !photoId) {
       throw new AppError('Content and photoId are required', 400);
+    }
+
+    // Analyze sentiment of the comment
+    const sentiment = (await analyzeSentiment(content))[0];
+
+    if (sentiment.label === 'NEGATIVE') {
+      throw new AppError('Comment is negative', 400);
     }
 
     const photo = await prisma.photo.findUnique({
       where: { id: parseInt(photoId) }
     });
-    console.log('Photo:', photo);
+
     if (!photo) {
       throw new AppError('Photo not found', 404);
     }
-    console.log('Photo found');
+
     const comment = await prisma.comment.create({
       data: {
         content,
         photoId: parseInt(photoId),
-        authorId: req.user!.userId
+        authorId: req.user!.userId,
+        sentimentLabel: sentiment.label,
+        sentimentScore: sentiment.score
       },
       include: {
-        author: true
+        author: true,
+        photo: true
       }
     });
 
