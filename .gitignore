@@ -3,3 +3,4 @@ client/.angular/
 client/dist
 .env
 package-lock.json
+server/dist
