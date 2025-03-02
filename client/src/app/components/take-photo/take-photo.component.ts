@@ -76,6 +76,14 @@ export class AuthDialogComponent {
   }
 
   retakePhoto() {
+    const canvas = this.canvasElement.nativeElement;
+    const context = canvas.getContext('2d');
+
+    if (!context) return;
+    // clear the canvas
+    canvas.style.display = 'none';
+    console.log('cleared canvas');
+
     this.photoTaken = false;
     this.initCamera();
   }
