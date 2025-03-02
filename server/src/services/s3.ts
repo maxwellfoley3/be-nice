@@ -11,7 +11,6 @@ const s3Client = new S3Client({
 const BUCKET_NAME = process.env.AWS_S3_BUCKET || '';
 
 export const uploadToS3 = async (fileBuffer: Buffer, fileName: string): Promise<string> => {
-  console.log('uploading to s3', fileName);
   try {
     const command = new PutObjectCommand({
       Bucket: BUCKET_NAME,
@@ -21,7 +20,6 @@ export const uploadToS3 = async (fileBuffer: Buffer, fileName: string): Promise<
     });
 
     await s3Client.send(command);
-    console.log('uploaded to s3', fileName);
     return `https://${BUCKET_NAME}.s3.amazonaws.com/${fileName}`;
   } catch (error) {
     console.error('Error uploading to S3:', error);

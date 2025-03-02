@@ -28,21 +28,19 @@ router.get('/photo/:photoId', async (req, res, next) => {
 });
 // Create a comment
 router.post('/', auth_1.authenticate, async (req, res, next) => {
-    console.log('Creating comment');
     try {
         const { content, photoId } = req.body;
-        console.log('Content:', content);
         if (!content || !photoId) {
             throw new errorHandler_1.AppError('Content and photoId are required', 400);
         }
         const photo = await prisma.photo.findUnique({
             where: { id: parseInt(photoId) }
         });
-        console.log('Photo:', photo);
+
         if (!photo) {
             throw new errorHandler_1.AppError('Photo not found', 404);
         }
-        console.log('Photo found');
+
         const comment = await prisma.comment.create({
             data: {
                 content,

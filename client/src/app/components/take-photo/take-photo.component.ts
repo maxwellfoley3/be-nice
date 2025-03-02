@@ -81,15 +81,12 @@ export class AuthDialogComponent {
   }
 
   async acceptPhoto() {
-    console.log('acceptPhoto');
     try {
       const canvas = this.canvasElement.nativeElement;
       const photoData = canvas.toDataURL('image/jpeg');
       
-      console.log('isAuthenticated', this.authService.isAuthenticated());
       // First authenticate
       if (!this.authService.isAuthenticated()) {
-        console.log('authenticating');
         await this.authService.authenticate();
       }
       

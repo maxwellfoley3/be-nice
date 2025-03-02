@@ -29,7 +29,6 @@ app.use(errorHandler_1.errorHandler);
 app.use(express_1.default.static(path_1.default.join(__dirname, '../../client/dist/be-nice-client/browser')));
 /* final catch-all route to index.html defined last */
 app.get('*', (req, res) => {
-    console.log('CATCH ALL');
     res.sendFile(path_1.default.join(__dirname, '../../client/dist/be-nice-client/browser/index.html'));
 });
 // Start server
