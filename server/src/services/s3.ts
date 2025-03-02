@@ -11,9 +11,6 @@ const s3Client = new S3Client({
 const BUCKET_NAME = process.env.AWS_S3_BUCKET || '';
 
 export const uploadToS3 = async (fileBuffer: Buffer, fileName: string): Promise<string> => {
-  console.log('Bucket name', BUCKET_NAME);
-  console.log('Region', process.env.AWS_REGION);
-
   try {
     const command = new PutObjectCommand({
       Bucket: BUCKET_NAME,
