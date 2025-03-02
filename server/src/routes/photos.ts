@@ -44,7 +44,7 @@ router.get('/user/:clientId', async (req, res, next) => {
 
 // Upload a new photo
 router.post('/', authenticate, async (req, res, next) => {
-  console.log('uploading photo');
+  console.log('Uploading photo');
   try {
     if (!req.body.photo || !req.body.photo.startsWith('data:image')) {
       throw new AppError('No photo uploaded or invalid format', 400);
