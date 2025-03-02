@@ -1,0 +1,51 @@
+<div class="photo-comment-container" *ngIf="photo">
+    <img [src]="photo.imageUrl" alt="Photo" class="photo">
+    <a [routerLink]="['/']">
+      <div class="back-button">
+            <img src="assets/arrow.svg" alt="Back">
+      </div>
+    </a>
+
+    <div class="comments-section">
+      <h3>Say nice things</h3>
+      <div class="service-unavailable-message" *ngIf="showServiceUnavailable">
+        <p>⚠️ It looks like the sentiment analysis service is currently unavailable, unfortunately. We apologize for the inconvenience, and please try again later.</p>
+      </div>
+      <div class="positive-sentiment-message" *ngIf="positiveSentiment">
+        <p>Thank you for being friendly!</p>
+      </div>
+      <div class="negative-sentiment-message" *ngIf="negativeSentiment">
+        <p>We think your comment is negative... Can you try being nicer?</p>
+      </div>
+      <div class="loading-spinner" *ngIf="loading">
+        <img src="assets/loading.gif" alt="Loading">
+      </div>
+      <div class="comment-form">
+        <textarea 
+          [(ngModel)]="newComment" 
+          placeholder="Add a comment..."
+          rows="3"
+        ></textarea>
+        <button (click)="addComment()">Post Comment</button>
+      </div>
+      <div class="average-sentiment-score">
+        @if (comments.length > 0) {
+          <p>Average sentiment: {{math.round(averageSentiment(comments) * 100)}}%</p>
+        }
+      </div>
+      <div class="comments-list">
+        <div class="comment" *ngFor="let comment of comments">
+          <div class="comment-photo">
+            <img [src]="comment.authorPhoto" alt="Comment Photo">
+          </div>
+          <div class="comment-text">
+            <div class="comment-header">
+              <span class="date">{{comment.createdAt | date}}</span>
+            </div>
+            <p class="content">{{comment.content}}</p>
+            <p class="sentiment-score">{{math.round(comment.sentimentScore * 100)}}% nice</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

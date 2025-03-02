@@ -1,0 +1,17 @@
+{
+    "name": "be-nice",
+    "workspaces": [
+        "client",
+        "server"
+    ],
+    "scripts": {
+        "client:dev": "cd client && npm run start",
+        "server:dev": "cd server && npm run dev",
+        "dev": "concurrently \"npm run client:dev\" \"npm run server:dev\"",
+        "build": "cd client && npm run build && cd ../server && rm -rf dist && npm run build",
+        "start": "node server/dist/server.js"
+    },
+    "dependencies": {
+        "concurrently": "^8.2.2"
+    }
+}
