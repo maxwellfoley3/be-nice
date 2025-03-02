@@ -29,7 +29,9 @@
         <button (click)="addComment()">Post Comment</button>
       </div>
       <div class="average-sentiment-score">
-        <p>Average sentiment: {{math.round(averageSentiment(comments) * 100)}}%</p>
+        @if (comments.length > 0) {
+          <p>Average sentiment: {{math.round(averageSentiment(comments) * 100)}}%</p>
+        }
       </div>
       <div class="comments-list">
         <div class="comment" *ngFor="let comment of comments">
